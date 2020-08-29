@@ -14,7 +14,6 @@ chrome_options = webdriver.ChromeOptions()
 prefs = {"profile.default_content_setting_values.notifications" : 2}
 
 chrome_options.add_experimental_option("prefs",prefs)
-
 driver = webdriver.Chrome(chrome_options=chrome_options)
 action = ActionChains(driver)
 
@@ -71,7 +70,7 @@ def showMessage():
         driver.save_screenshot('./screenshots/emptyInputField.png')
 
         emptyText.click()
-        driver.find_element_by_xpath(conversation_flow.showMessage_input_opened_closed).send_keys(data.input_text_1)
+        driver.find_element_by_xpath(conversation_flow.showMessage_input_opened_closed).send_keys(data.Field_Name)
 
         save_btn = driver.find_element_by_xpath(conversation_flow.save_conv_btn)
         action.move_to_element(save_btn).perform()
@@ -95,6 +94,7 @@ def del_step(stepName):
         ellipses.click()
 
         driver.find_element_by_xpath(conversation_flow.del_step).click()
+        driver.save_screenshot('./screenshots/deletedStep.png')
         return True
     except Exception as e:
         print e
@@ -112,6 +112,7 @@ def verify_Preview(stepName):
     elif stepName in 'Show plain text input':
         elem = driver.find_element_by_xpath(conversation_flow.plainText_ip)
         if elem is not None:
+            driver.save_screenshot('./screenshots/Previewverify.png')
             return True
         else:
             return False
@@ -121,7 +122,6 @@ def verify_Preview(stepName):
         return True
     else:
         return False
-    closeBrowser()
 
 def add_conditions(stepName):
     try:
@@ -132,11 +132,12 @@ def add_conditions(stepName):
         driver.find_element_by_xpath(conversation_flow.add_condition_step).click()
         conditionheading = driver.find_element_by_xpath(conversation_flow.conHeading)
         if conditionheading is not None:
+            driver.save_screenshot('./screenshots/AddedCond.png')
             return True
         else:
             return False
-    except:
-        print("Some error occurred!")
+    except Exception as e:
+        print(e)
         closeBrowser()
 
 def remCondition(stepName):
@@ -148,8 +149,9 @@ def remCondition(stepName):
 
         driver.find_element_by_xpath(conversation_flow.rem_condition_step).click()
     except NoSuchElementException:
-        pass
-    closeBrowser()
+        driver.save_screenshot('./screenshots/RemovedCond.png')
+    except Exception as e:
+        print(e)
     return True
 
 def add_Redirect(redirectType, pathName1="MyPath", pathName2="SecondPath"):
@@ -199,6 +201,7 @@ def rem_path():
 def verify_delPath():
     try:
         toolTip = driver.find_element_by_xpath(conversation_flow.empty_pathField)
+        driver.save_screenshot('./screenshots/DeletedPath.png')
         if toolTip is not None:
             closeBrowser()
             return True
@@ -235,6 +238,7 @@ def addDelay(stepName='Show a message', delay='2'):
     success_msg = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, conversation_flow.save_success_alert)))
     if success_msg is not None :
          driver.save_screenshot('./screenshots/convSaved.png')
+         return True
     else:
         raise AssertionError
 
@@ -251,8 +255,8 @@ def editPathName():
 
         action.move_to_element(driver.find_element_by_xpath(conversation_flow.save_conv_btn))
         action.click(driver.find_element_by_xpath(conversation_flow.save_conv_btn))
-        print(paths.get_attribute('value'))
         if paths.get_attribute('value') in data.Field_Name:
+            driver.save_screenshot('./screenshots/EditPathName.png')
             return True
         else:
             return False
@@ -268,8 +272,9 @@ def validateAddNewSteps():
 
         steptypes = driver.find_elements_by_xpath(conversation_flow.stepsTypes)
         for types in steptypes:
-            testVal.append(types)
+            testVal.append(types.text)
         if testVal == data.stepTypes:
+            driver.save_screenshot('./screenshots/AddStepVals.png')
             return True
         else: 
             return False
@@ -285,6 +290,7 @@ def createCustomField():
         action.send_keys(Keys.RETURN)
         action.perform()
         driver.find_element_by_xpath(conversation_flow.customFieldSubmit).click()
+        return True
     except Exception as e:
         print(e)
         
@@ -299,6 +305,7 @@ def verifyCustomField():
         fieldHeadingLoc = conversation_flow.FieldInput.replace('@@@',data.Field_Name)
         fieldHeading = driver.find_element_by_xpath(fieldHeadingLoc)
         if fieldHeading is not None:
+            driver.save_screenshot('./screenshots/CustomFields.png')
             return True
         else:
             return False
@@ -317,6 +324,7 @@ def verifyRoutingSteps(times):
 
         routingElems = driver.find_elements_by_xpath(routingStepsLoc)
         if len(routingElems) == times+1:
+            driver.save_screenshot('./screenshots/RoutingSteps.png')
             return True
         else:
             return False
@@ -326,20 +334,3 @@ def verifyRoutingSteps(times):
 def closeBrowser():
     driver.close()
 
-def IA_14():
-    #Validate 'end this path with' field if an associated path is deleted
-    try:
-        signin(data.emailID_val, data.password_Val,data.URL)
-        addpath = add_path()
-        rempath = rem_path()
-        verify = verify_delPath()
-        if addpath and rem_path and verify:
-            print("IA14 Pass")
-        else:
-            print("IA14 Fail")
-    except Exception as e:
-        print(e)
-
-# signin(data.emailID_val, data.password_Val,data.URL)
-# create_convStep('Show a message')
-# del_step('Show a message')
