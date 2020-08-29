@@ -16,6 +16,8 @@ del_step = "//div[contains(text(),'Delete step')]"
 add_condition_step = "//div[contains(text(),'Add condition')]"
 rem_condition_step = "//div[contains(text(),'Remove condition')]"
 preview_btn = "//div[contains(text(),'Preview')]"
+delayInput = "//div[contains(text(),'@@@')]/../div/div/div/div/input"
+stepsTypes = "//div[@id='PopupContainer']/div/div"
 
 empty_input_field = "//div[@class='text-danger mt-1' and contains(.,'Please enter a message')]"
 
@@ -30,6 +32,9 @@ field_dd = "//div[contains(text(),'Select or type to create a new field')]/.."
 field_heading = "//div[contains(text(), '@@@')]"
 plainText_ip = "//div[contains(text(), 'User sends an input')]"
 redirectPathField = "//div[contains(text(),'Select a path')]/.."
+removeFieldIcon = "(//div[contains(text(), '@@@')]/../../div/div/*[name()='svg'])[1]"
+customFieldSubmit = "//button/span/span[contains(text(),'Create field')]"
+FieldInput = "(//div[contains(text(), '@@@')])[1]"
 
 #conditions
 conHeading = "//button/span/span[contains(text(),'Show conditions')]"
@@ -38,3 +43,9 @@ conHeading = "//button/span/span[contains(text(),'Show conditions')]"
 path_inputs = "//input[@value='@@@']"
 remove_path_icon = "(//input[@value='MyPath']/../../../../span/div/*[name()='svg'])"
 empty_pathField = "//div[contains(text(), 'This field cannot be empty')]"
+
+#draggableContent
+stepsDiv = "//div[@data-rbd-droppable-id='droppable']/div/div/div/div"
+
+#Alert
+routingSteps = "//div[contains(text(),'@@@')]"
